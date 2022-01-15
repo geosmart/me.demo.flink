@@ -12,12 +12,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class FraudDetector : KeyedProcessFunction<Long, Transaction, Alert>() {
-
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    private val SMALL_AMOUNT = 1.00
-    private val LARGE_AMOUNT = 500.00
-    private val ONE_MINUTE = (60 * 1000).toLong()
+    companion object {
+        private const val SMALL_AMOUNT = 1.00
+        private const val LARGE_AMOUNT = 500.00
+        private const val ONE_MINUTE = (60 * 1000).toLong()
+    }
 
     /***
      * has three states, unset (null), true, and false,
@@ -26,10 +27,22 @@ class FraudDetector : KeyedProcessFunction<Long, Transaction, Alert>() {
     @Transient
     var flagState: ValueState<Boolean>? = null
 
+    /***
+     * considered fraud if they occurred within 1 minute of each other.
+     */
+    @Transient
+    var timerState: ValueState<Long>? = null
+
+    /***
+     * todo when call open()
+     */
     override fun open(parameters: Configuration?) {
         logger.info("open function")
-        val stateDescriptor = ValueStateDescriptor("flag", Types.BOOLEAN)
-        flagState = runtimeContext.getState(stateDescriptor)
+        val flagDescriptor = ValueStateDescriptor("flag-state", Types.BOOLEAN)
+        flagState = runtimeContext.getState(flagDescriptor)
+
+        val timerDescriptor = ValueStateDescriptor("timer-state", Types.LONG)
+        timerState = runtimeContext.getState(timerDescriptor)
     }
 
     /***
@@ -46,12 +59,36 @@ class FraudDetector : KeyedProcessFunction<Long, Transaction, Alert>() {
                 alert.id = tx.accountId
                 out.collect(alert)
             }
-            flagState!!.clear()
+            cleanup(ctx)
         }
         if (tx.amount < SMALL_AMOUNT) {
+            //set flag state
             logger.info("detect small")
             flagState!!.update(true)
+
+            // set a timer for 1 minute in the future every time the flag is set
+            // and store the timestamp in timerState.
+            val timer = ctx.timerService().currentProcessingTime() + ONE_MINUTE
+            ctx.timerService().registerEventTimeTimer(timer)
+            timerState!!.update(timer)
         }
+    }
+
+    override fun onTimer(timestamp: Long, ctx: OnTimerContext, out: Collector<Alert>) {
+        // remove flag after 1 minute
+        timerState!!.clear()
+
+        flagState!!.clear()
+    }
+
+    private fun cleanup(ctx: Context) {
+        //delete timer
+        val timer = timerState!!.value()
+        ctx.timerService().deleteEventTimeTimer(timer)
+
+        //clean up all state
+        timerState!!.clear()
+        flagState!!.clear()
     }
 
 }

@@ -27,5 +27,5 @@ fun main(args: Array<String>) {
         .addSink(AlertSink())
         .name("send-alerts")
 
-    env.execute("fraud-detection")
+    env.setParallelism(1).execute("fraud-detection")
 }
