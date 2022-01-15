@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
     val wordCount: DataStream<Tuple2<String, Int>?> = stream.flatMap { line: String, collector: Collector<Tuple2<String, Int>?> ->
         val tokens = line.split(",").toTypedArray()
         for (token in tokens) {
-            if (token.length > 0) {
+            if (token.isNotEmpty()) {
                 collector.collect(Tuple2(token, 1))
             }
         }

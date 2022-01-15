@@ -1,6 +1,5 @@
 package me.demo.flink.fraud
 
-import me.demo.flink.fraud.FraudDetector
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.walkthrough.common.entity.Alert
