@@ -17,16 +17,31 @@ ext {
 }
 
 dependencies {
+    //flink basic 
     compile "org.apache.flink:flink-streaming-java_$flinkScalaVersion:$flinkVersion"
-    compile "org.apache.flink:flink-walkthrough-common_$flinkScalaVersion:$flinkVersion"
     compile "org.apache.flink:flink-clients_$flinkScalaVersion:$flinkVersion"
-    compile "org.apache.flink:flink-connector-kafka_$flinkScalaVersion:$flinkVersion"
-    compile "org.apache.flink:flink-connector-kafka_$flinkScalaVersion:$flinkVersion"
     compile "org.apache.flink:flink-runtime-web_$flinkScalaVersion:$flinkVersion"
+
+    // demo
+    compile "org.apache.flink:flink-walkthrough-common_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-walkthrough-table-java:1.11.1"
+
+    // table api
+    compile "org.apache.flink:flink-table-api-java:$flinkVersion"
+
+    //connector
+    compile "org.apache.flink:flink-connector-kafka_$flinkScalaVersion:$flinkVersion"
+
+    //log
     compile "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
     compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     compile "org.apache.logging.log4j:log4j:$log4jVersion"
+
+    //test
+    testCompile "junit:junit:4.13.2"
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
 
