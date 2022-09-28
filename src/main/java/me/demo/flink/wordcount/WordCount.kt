@@ -10,7 +10,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.util.Collector
 import java.util.Properties
 
-fun main(args: Array<String>) {
+fun main() {
     //source:kafka
     val properties = Properties()
     properties.setProperty("bootstrap.servers", "10.199.150.199:9092")
