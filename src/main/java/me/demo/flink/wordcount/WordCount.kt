@@ -10,34 +10,36 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.util.Collector
 import java.util.Properties
 
-fun main() {
-    //source:kafka
-    val properties = Properties()
-    properties.setProperty("bootstrap.servers", "10.199.150.199:9092")
-    properties.setProperty("group.id", "flink_word_count")
-    val inputTopic = "flink_debug"
-    val consumer = FlinkKafkaConsumer(inputTopic, SimpleStringSchema(), properties)
-    consumer.setStartFromEarliest()
+class WordCount {
+    fun main() {
+        //source:kafka
+        val properties = Properties()
+        properties.setProperty("bootstrap.servers", "10.199.150.199:9092")
+        properties.setProperty("group.id", "flink_word_count")
+        val inputTopic = "flink_debug"
+        val consumer = FlinkKafkaConsumer(inputTopic, SimpleStringSchema(), properties)
+        consumer.setStartFromEarliest()
 
-    //compute environment
-    val env = StreamExecutionEnvironment.getExecutionEnvironment()
-    val stream: DataStream<String> = env.addSource(consumer)
+        //compute environment
+        val env = StreamExecutionEnvironment.getExecutionEnvironment()
+        val stream: DataStream<String> = env.addSource(consumer)
 
-    //transformer
-    val wordCount: DataStream<Tuple2<String, Int>?> = stream.flatMap { line: String, collector: Collector<Tuple2<String, Int>?> ->
-        val tokens = line.split(",").toTypedArray()
-        for (token in tokens) {
-            if (token.isNotEmpty()) {
-                collector.collect(Tuple2(token, 1))
+        //transformer
+        val wordCount: DataStream<Tuple2<String, Int>?> = stream.flatMap { line: String, collector: Collector<Tuple2<String, Int>?> ->
+            val tokens = line.split(",").toTypedArray()
+            for (token in tokens) {
+                if (token.isNotEmpty()) {
+                    collector.collect(Tuple2(token, 1))
+                }
             }
-        }
-    }.returns(Types.TUPLE(Types.STRING, Types.INT))
-        .keyBy(0)
-        .timeWindow(Time.seconds(20))
-        .sum(1)
-    //sink:console
-    wordCount.print()
+        }.returns(Types.TUPLE(Types.STRING, Types.INT))
+            .keyBy(0)
+            .timeWindow(Time.seconds(20))
+            .sum(1)
+        //sink:console
+        wordCount.print()
 
-    //action
-    env.execute("kafka streaming world count")
+        //action
+        env.execute("kafka streaming world count")
+    }
 }
