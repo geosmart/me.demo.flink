@@ -8,7 +8,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.util.Collector
 
 class UnBoundedStreamWordCount {
-    fun main() {
+    fun main(args:Array<String>) {
         //1. 定义stream环境，默认local
         val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment()
         //2. 读取socket文本流

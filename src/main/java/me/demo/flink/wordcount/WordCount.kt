@@ -11,7 +11,7 @@ import org.apache.flink.util.Collector
 import java.util.Properties
 
 class WordCount {
-    fun main() {
+    fun main(args:Array<String>) {
         //source:kafka
         val properties = Properties()
         properties.setProperty("bootstrap.servers", "10.199.150.199:9092")

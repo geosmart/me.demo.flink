@@ -1,0 +1,75 @@
+version: '3.7'
+
+services:
+  minio:
+    restart: always
+    image: minio/minio
+    container_name: minio
+    ports:
+        - "9000:9000"
+        - "9001:9001"
+    command: server /data --console-address ':9001' --address ':9000'
+    environment:
+        - MINIO_ROOT_USER=minio_admin
+        - MINIO_ROOT_PASSWORD=minio_admin
+        - TZ=Asia/Shanghai
+    volumes:
+        - ./minio/data/:/data
+        - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
+    networks:
+      - flink
+  
+  flink-jobmanager:
+    image: flink:1.12.2-scala_2.12-java8
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    depends_on:
+      - minio
+    networks:
+      - flink
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - TZ=Asia/Shanghai
+    command: jobmanager
+    volumes:
+        - ./flink-conf:/opt/flink/conf
+        - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
+
+  flink-taskmanager:
+    image: flink:1.12.2-scala_2.12-java8
+    hostname: flink-taskmanager
+    networks:
+      - flink
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    scale: 2
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - TZ=Asia/Shanghai
+    volumes:
+        - ./flink-conf:/opt/flink/conf
+        - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
+
+networks:
+  flink:
+    driver: bridge
+
+# 先从容器复制配置文件/flink-conf，在外部修改后，再将/flink-conf挂载到容器内的/opt/flink/conf
+
+# 问题
+# org.apache.flink.runtime.rest.handler.RestHandlerException: 
+# No jobs included in application. 
+#  at org.apache.flink.runtime.webmonitor.handlers.JarRunHandler.lambda$handleRequest$1(JarRunHandler.java:114)
+#  at java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:836) 
+#  at java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:811) at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488) 
+#  at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1609) at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511) 
+#  at java.util.concurrent.FutureTask.run(FutureTask.java:266) at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180) 
+#  at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293) at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) 
+#  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) at java.lang.Thread.run(Thread.java:748)
+
+# 使用examples/batch/WordCount.jar测试
+# class: org.apache.flink.examples.java.wordcount.WordCount
