@@ -24,12 +24,12 @@ jar {
 
 dependencies {
     //flink basic
-    compileOnly "org.apache.flink:flink-streaming-java_$flinkScalaVersion:$flinkVersion"
-    compileOnly "org.apache.flink:flink-clients_$flinkScalaVersion:$flinkVersion"
-    compileOnly "org.apache.flink:flink-runtime-web_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-streaming-java_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-clients_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-runtime-web_$flinkScalaVersion:$flinkVersion"
 
     // table api
-    compileOnly "org.apache.flink:flink-table-api-java:$flinkVersion"
+    compile "org.apache.flink:flink-table-api-java:$flinkVersion"
 
     // demo
     compile "org.apache.flink:flink-walkthrough-common_$flinkScalaVersion:$flinkVersion"

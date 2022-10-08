@@ -1,0 +1,120 @@
+Projects:
+  # q2-okr:
+
+# dboard:
+
+  # mlp:
+  
+  # wip:
+    
+  # idea（每天1小时）:
+    ☐ 参考letcode出一个渐进式算法面试题
+    ☐ react学习：输出笔记
+    ☐ 正则学习：输出笔记 @started(21-03-19 15:02)
+    ☐ 输出hdfs的架构图：角色关系，部署结构，数据读写流程
+    ☐ 输出yarn的架构图：角色关系，任务执行流程
+    ☐ 寻找密码管理器：手机可同步，如BitWarden，keepass
+
+
+# dboard20上线:
+   ☐ 补accessToken
+   ☐ 补数据同步项目：数据库，dboard_project和t_ds_project表
+     insert into t_ds_project(name,description,user_id,tenant_id,create_time,update_time) values ('__data_pipeline_22__','[系统项目]数据同步',1,0,now(),now());
+　 　 update t_ds_project set name=concat('__data_pipeline_',tenant_id,'__') where name like '__data_pipeline_%';
+　　  insert into dboard_project(project_id, tenant_id, permission, create_by, create_time)　select id,tenant_id,'PUBLIC','1',now() from t_ds_project where name like '__data_pipeline_%';
+   ☐ 已有的hive数据源配置kerberos认证信息，hive-site.xml
+   ☐ 
+
+ # deprecated:
+
+Archive:
+  ✔ 数据地图： @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ 可视化分析工具，支持视图/组件/图表定义，数据源和任务执行外部化， @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ cube.js： @done(21-08-16 10:04) @project(Projects.# q2-okr)
+    [demo](https://real-time-dashboard.cube.dev/overview)
+    数据源：
+    数据视图+组件(schema构建查询sql)，执行（jdbc-driver）；
+    看板：
+  ✔ flinkx：测试kafka实时同步到hive，impala查询的实时性 @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ apache beam实现flink和spark操作 @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ 验证数据同步-flinkx的可行性：易于二开，调试 @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ spark升级到2.4.7，不然和livy不兼容，kyro版本冲突 @done(21-08-16 10:04) @project(Projects.# q2-okr)
+  ✔ 梳理dboard的cicd时序图 @done(21-08-16 10:04) @project(# dboard)
+  ✔ dboard2.0的数据模型 @started(21-04-26 09:06) @done(21-08-16 10:04) @lasted(16w58m14s) @project(# dboard)
+  ✔ dss获取表结构：operation failed(操作失败)s！the reason(原因)：GSSException: No valid credentials provided (Mechanism level: Failed to find any Kerberos tgt) @done(21-08-16 10:04) @project(# dboard)
+  ✔ dboard发生产需要对所有的sqoop任务编辑一遍 @done(21-08-16 10:04) @project(# dboard)
+  ✔ docker-compose脚本，启动多个实例，返回部署实例的ip和端口，或者服务负载均衡入口 @done(21-08-16 10:04) @project(# dboard.# mlp)
+  ✔ dboard-ide配置虚拟环境，测试 @done(21-08-16 10:04) @project(# dboard.# mlp)
+  ✔ 隐藏开发和运维 @done(21-08-16 10:04) @project(# dboard.# wip)
+  ✔ 用户角色不对 @done(21-08-16 10:04) @project(# dboard.# wip)
+  ✔ kotlin学习：语法、实战，输出笔记 @done(21-08-16 10:04) @project(# dboard.# idea（每天1小时）)
+  ✔ hive create table save as 字段丢失问题 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ shui5库从mysql同步到hive的findata_ods库 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ dolphinscheduler升级1.4.6 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ 文件管理：备注必须更新问题，备注太长问题 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ pyspark任务，可指定虚拟python环境 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ dboard mysql任务（47），mysql(insert)任务状态成功，数据库要延迟2分钟+才有数据； @done(21-08-16 10:03) @project(# deprecated)
+  ✔ 实时数仓调研：升级spark到2.4.7以集成delta lake 0.7.0 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ 用户可以删除自己创建的工作空间，其他工作空间只读 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ engine生成系统日志，执行脚本到非用户可见的临时目录 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ dss在界面kill engine后，实际engine仍然在运行中； @done(21-08-16 10:03) @project(# deprecated)
+  ✔ engine自动创建用户和用户目录 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ checkpoint问题 @done(21-08-16 10:03) @project(# deprecated)
+  ✔ 验证ds1.3.6版本： @done(21-05-08 17:38) @project(# dboard)
+  ✔ sqoop @done(21-05-08 17:38) @project(# dboard)
+  ✔ spark @done(21-05-08 17:38) @project(# dboard)
+  ✔ flink @done(21-05-08 17:38) @project(# dboard)
+  ✔ sql @done(21-05-08 17:38) @project(# dboard)
+  ✔ shell @done(21-05-08 17:38) @project(# dboard)
+  ✔ datasource @done(21-05-08 17:38) @project(# dboard)
+  ✔ livy需要调通cluster模式 @started(21-04-21 15:18) @done(21-04-30 14:16) @lasted(1w1d22h58m2s) @project(Projects.# q2-okr)
+  ✔ 告警平台数据流向图 @done(21-04-30 14:15) @project(Projects.# dboard)
+  ✔ dboard用例图梳理 @done(21-04-26 09:06) @project(Projects.# dboard)
+  ✔ ds升级：spark.vue需要保留spark.mainPython @done(21-04-30 14:15) @project(Projects.# dboard)
+  ✔ sqoop：MysqlSourceGenerator需要对照更新 @done(21-04-25 21:46) @project(Projects.# dboard)
+  ✔ dboard-ide镜像制作 @started(21-04-29 08:33) @done(21-04-29 12:59) @lasted(4h26m6s) @project(Projects.# mlp)
+  ✔ mlp jupyter配置sparkmagic.json默认配置位置 @started(21-04-29 08:33) @done(21-04-29 12:59) @lasted(4h26m29s) @project(Projects.# mlp)
+  ✔ dboard2.0的上线方案 @done(21-04-26 09:06) @project(Projects.# dboard)
+  ✔ mlp jupyterLab对接 @done(21-04-30 14:14) @project(Projects.# dboard)
+  ✘ 测试环境与办公网端口网络不通问题: @cancelled(21-04-21 15:19) @project(Projects.# q2-okr)
+  ✔ dag节点可调试:livy调研 @done(21-04-15 16:37) @project(Projects.# q2-okr)
+  ✔ 数据同步产品化：实时，离线 @done(21-04-15 16:37) @project(Projects.# q2-okr)
+  ✔ 知识中心mysql业务库同步到hive的findata_ods库 @done(21-04-12 17:31) @project(Projects.# dboard)
+  ✔ sqoop:hive->mysql需要hdfs写权限：sqoop export而不是sqoop import @done(21-04-12 14:16) @project(Projects.# dboard)
+  ✔ jenkins调度任务迁移支撑-高频问 @started(21-04-07 09:51) @done(21-04-12 14:04) @lasted(5d4h13m55s) @project(Projects.# dboard)
+  ✔ linkis 1.0服务验证：存在执行问题 @done(21-04-12 14:05) @project(Projects.# dboard)
+  ✔ linkis 1.0升级部署脚本 @started(21-03-26 09:09) @done(21-04-12 14:05) @lasted(2w3d4h56m42s) @project(Projects.# dboard)
+  ✔ hive同步到es支持前缀 @done(21-04-08 10:39) @project(Projects.# dboard)
+  ✔ kerberos认证 @done(21-03-30 17:31) @project(Projects.# dboard)
+  ✔ 租户集成 @done(21-03-30 17:31) @project(Projects.# dboard)
+  ✔ docker容器调试 @started(21-03-29 20:47) @done(21-03-31 11:55) @lasted(1d15h8m56s) @project(Projects.# dboard)
+  ✔ policy关联policy写入policy_mark表 @started(21-03-22 20:03) @done(21-03-23 16:36) @lasted(20h33m46s) @project(Projects.# visualis)
+  ✔ 授权分享登录集成dss登录 @project(Projects.# visualis) @done(21-03-22 20:03) @project(Projects.# idea)
+  ✔ Visualis-看板下载任务失败：生产环境排查 @started(21-03-17 19:41) @done(21-03-19 15:02) @lasted(1d19h21m34s) @project(Projects.# visualis)
+  ✔ 提取关联政策：政策导入时，识别出关联政策，并插入政策关联表annotation(id,type,offset,content,polict_id,ref_id) @started(21-03-17 09:09) @done(21-03-18 20:29) @lasted(1d11h20m24s) @project(Projects.# taxre)
+  ✔ 生产环境visualis数据修复：email,org @done(21-03-17 19:41) @project(Projects.# visualis)
+    //sql: update linkis_user set email=concat(username,'@servyou.com.cn'),active=1;
+  ✔ davinci图片加载异常 @started(21-03-11 17:24)：pic值未设置 @done(21-03-17 11:36) @lasted(5d18h12m41s) @project(Projects.# visualis)
+  ✔ visualis中资源（数据源，视图，组件，看板，大屏）可共享给其他用户，并指定只读or读写权限 @started(21-03-11 14:23) @done(21-03-17 09:34) @lasted(5d19h11m7s) @project(Projects.# visualis)
+  ✔ 用户创建的项目列表为空（实际有数据）：loginUser为空导致的 @est3h @done(21-03-17 09:34) @project(Projects.# visualis)
+  ✔ 角色添加成员，显示成员关联角色：loginUser为空导致的 @done(21-03-17 09:33) @project(Projects.# visualis)
+  ✔ impala数据源搜索异常 @done(21-03-17 09:15) @project(Projects.# visualis)
+  ✔ 项目搜索功能异常 @started(21-03-11 17:24) @done(21-03-15 16:41) @lasted(3d23h17m29s) @project(Projects.# visualis)
+  ✔ scriptis,历史-排队中任务状态，实际是successed：前端缓存导致的 @done(21-03-15 15:21) @project(Projects.# dss)
+  ✘ visualis后端可避过dss直接调试，允许跨域访问：前端通过代理解决，手动添加cookie @cancelled(21-03-15 15:20) @project(Projects.# visualis)
+  ✔ 用户登录时，设置email、active、name字段 @done(21-03-15 15:17) @project(Projects.# dss)
+  ✔ taxre后端代码阅读-输出er图 @done(21-03-15 14:01) @project(Projects.# taxre)
+  ✔ Visualis启用redis缓存，连接问题：暂时关闭 @done(21-03-15 08:58) @project(Projects.# visualis)
+  ✔ visualis组织邀请确认邮件跳转到dboard，dboard登录后调用成员确认邀请接口 @done(21-03-15 08:58) @project(Projects.# visualis)
+  ✔ dboard的cdh镜像spark-sql存在hive配置问题，导致没有创建表的权限：create table findata.ods_finzoo_feed_parquet6 stored as parquet as select  from findata.ods_finzoo_feed_parquet; @done(21-03-11 14:24) @project(Projects.# dboard)
+    //暂只支持创建外部表
+  ✔ spark-sql执行sql异常：java.lang.NoClassDefFoundError: Could not initialize class org.xerial.snappy.Snappy @started(21-03-09 11:23) @done(21-03-09 11:23) @lasted(31s) @project(Projects.# dboard)
+  ✔ policy content抽取 @done(21-03-11 14:00) @project(Projects.# taxre)
+  ✔ UnsatisfiedLinkError: /tmp/snappy-1.0.4.1-libsnappyjava.so: Error loading shared library ld-linux-x86-64.so.2: @done(21-03-09 11:20)    @project(Projects.# dboard)
+    //resolve by apk update && apk add --no-cache libc6-compat  gcompat @done(21-03-11 14:01)
+  ✔ 新增mysql库全量同步工具+知识中心业务库全量同步到hive @done(21-03-09 08:35) @project(Projects.# dboard)
+  ✔ Visualis查询impala元数据同步：目前手动同步 @done(21-03-08 14:16) @project(Projects.# visualis)
+  ✔ Visualis默认值：视图默认只展示前5000条数据，组件默认查询方式改为手动 @done(21-03-08 14:16) @project(Projects.# visualis)
+  ✔ Visualis功能启用：启用浏览历史功能 @done(21-03-08 14:16) @project(Projects.# visualis)
+  ✔ 政策数据增量同步 @done(21-03-08 14:16) @project(Projects.# taxre)  
+
