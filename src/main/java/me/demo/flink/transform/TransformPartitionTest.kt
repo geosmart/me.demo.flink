@@ -51,6 +51,19 @@ fun main() {
         .rescale()
         .print("rescale").setParallelism(4)
 
+    // 广播分区：每条数据都分配到下来有的所有分区
+    elementStream.broadcast().print("broadcast").setParallelism(2)
+
+    // 全局分区：所有数据合并到1个分区,setParallelism无效
+    elementStream.global().print("global").setParallelism(2)
+
+    // 自定义分区
+    env.fromElements(1, 2, 3, 4, 5, 6, 7, 8).setParallelism(1)
+        .partitionCustom(
+            { key, _ -> key % 2 },
+            { value -> value }
+        ).print("partitionCustom").setParallelism(4)
+
     env.execute()
 }
 
