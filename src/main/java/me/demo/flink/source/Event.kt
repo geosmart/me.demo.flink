@@ -1,6 +1,5 @@
 package me.demo.flink.source
 
-import org.apache.flink.api.common.typeinfo.IntegerTypeInfo
 import java.sql.Timestamp
 
 open class Event {

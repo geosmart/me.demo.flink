@@ -8,10 +8,13 @@ import org.apache.flink.api.java.tuple.Tuple2
 import org.apache.flink.streaming.api.datastream.DataStreamSource
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow
+import org.apache.flink.util.Collector
 import java.sql.Timestamp
 
 class WindowTest {
@@ -94,8 +97,37 @@ fun main() {
             .keyBy { it.user }
             .window(TumblingEventTimeWindows.of(Time.seconds(5)))
             .aggregate(MyAggFun())
-    avgOutput.print("APT:TumblingEventTimeWindows")
+//    avgOutput.print("APT:TumblingEventTimeWindows")
+
+    //使用ProcessWindowFunction计算UV
+    val uvProcessWindowOut = env.addSource(CustomSource())
+        .assignTimestampsAndWatermarks(
+            WatermarkStrategy.forMonotonousTimestamps<Event>()
+                .withTimestampAssigner { element, _ -> element.timestamp }
+        )
+//    uvProcessWindowOut.print("input")
+    uvProcessWindowOut.keyBy { true}
+        .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+        .process(UvCountByWindow())
+        .print("UvCountByWindow")
+
     env.execute()
+}
+
+/***
+<IN> – Event
+<OUT> – String
+<KEY> – Boolean
+<W> – TimeWindow
+ */
+class UvCountByWindow : ProcessWindowFunction<Event, String, Boolean, TimeWindow>() {
+    override fun process(key: Boolean, context: Context, elements: MutableIterable<Event>, out: Collector<String>) {
+        val uv = elements.map { it.user }.toSet().size.toString()
+        // 结合窗口信息输出
+        val start = Timestamp(context.window().start)
+        val end = Timestamp(context.window().end)
+        out.collect("windows[$start,$end],UV=$uv")
+    }
 }
 
 /***
