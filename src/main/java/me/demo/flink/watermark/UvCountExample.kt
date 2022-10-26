@@ -73,7 +73,7 @@ class UvProcessWindowFunction : ProcessWindowFunction<Long, String, Boolean, Tim
         // 结合窗口信息输出
         val start = Timestamp(context.window().start)
         val end = Timestamp(context.window().end)
-        val uv = elements.iterator().next().toLong()
+        val uv = elements.iterator().next()
         out.collect("windows[$start,$end],UV=$uv")
     }
 
