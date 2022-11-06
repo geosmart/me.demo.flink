@@ -47,7 +47,6 @@ class UrlViewCount {
     override fun toString(): String {
         return "windows[${Timestamp(windowStart)},${Timestamp(windowEnd)}],url=$url,count=$count"
     }
-
 }
 
 /***
