@@ -1,6 +1,6 @@
 package me.demo.flink.watermark
 
-import me.demo.flink.source.CustomSource
+import me.demo.flink.source.ClickSource
 import me.demo.flink.source.Event
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -76,7 +76,7 @@ fun main() {
 
     // 计窗时间窗口内用户的访问次数：reduce
     val output: SingleOutputStreamOperator<Tuple2<String, Int>> =
-        env.addSource(CustomSource())
+        env.addSource(ClickSource())
             .assignTimestampsAndWatermarks(
                 WatermarkStrategy.forMonotonousTimestamps<Event>()
                     .withTimestampAssigner { element, _ -> element.timestamp }
@@ -89,7 +89,7 @@ fun main() {
 
     // 计窗时间窗口内用户的平均访问时长：reduce
     val avgOutput: SingleOutputStreamOperator<String> =
-        env.addSource(CustomSource())
+        env.addSource(ClickSource())
             .assignTimestampsAndWatermarks(
                 WatermarkStrategy.forMonotonousTimestamps<Event>()
                     .withTimestampAssigner { element, _ -> element.timestamp }
@@ -100,7 +100,7 @@ fun main() {
 //    avgOutput.print("APT:TumblingEventTimeWindows")
 
     //使用ProcessWindowFunction计算UV
-    val uvProcessWindowOut = env.addSource(CustomSource())
+    val uvProcessWindowOut = env.addSource(ClickSource())
         .assignTimestampsAndWatermarks(
             WatermarkStrategy.forMonotonousTimestamps<Event>()
                 .withTimestampAssigner { element, _ -> element.timestamp }

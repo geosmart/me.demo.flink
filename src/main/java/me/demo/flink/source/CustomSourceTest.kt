@@ -13,7 +13,7 @@ fun main() {
 
 
     //  setParallelism只能为1，否则抛出异常：The parallelism of non parallel operator must be 1.
-    val source: DataStreamSource<Event> = env.addSource(CustomSource())
+    val source: DataStreamSource<Event> = env.addSource(ClickSource())
         .setParallelism(1)
 
     source.print("source")

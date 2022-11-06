@@ -1,6 +1,6 @@
 package me.demo.flink.watermark
 
-import me.demo.flink.source.CustomSource
+import me.demo.flink.source.ClickSource
 import me.demo.flink.source.Event
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -21,7 +21,7 @@ fun main() {
     env.parallelism = 1
 
     // 计窗时间窗口内，用户的PV/UV的比值：表示站点的用户粘性
-    val stream: SingleOutputStreamOperator<Event> = env.addSource(CustomSource())
+    val stream: SingleOutputStreamOperator<Event> = env.addSource(ClickSource())
         .assignTimestampsAndWatermarks(
             WatermarkStrategy.forMonotonousTimestamps<Event>()
                 .withTimestampAssigner { element, _ -> element.timestamp }

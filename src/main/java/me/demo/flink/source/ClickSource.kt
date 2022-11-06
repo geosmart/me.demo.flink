@@ -4,7 +4,7 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction
 import java.util.Calendar
 import java.util.Random
 
- class CustomSource : SourceFunction<Event> {
+ class ClickSource : SourceFunction<Event> {
 
     var running = true
 

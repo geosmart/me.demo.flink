@@ -1,6 +1,6 @@
 package me.demo.flink.watermark
 
-import me.demo.flink.source.CustomSource
+import me.demo.flink.source.ClickSource
 import me.demo.flink.source.Event
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -24,7 +24,7 @@ fun main() {
     env.config.autoWatermarkInterval = 100
 
     //使用ProcessWindowFunction计算UV
-    val uvAgg = env.addSource(CustomSource())
+    val uvAgg = env.addSource(ClickSource())
         .assignTimestampsAndWatermarks(
             WatermarkStrategy.forBoundedOutOfOrderness<Event>(Duration.ofSeconds(3))
                 .withTimestampAssigner { element, _ -> element.timestamp }
