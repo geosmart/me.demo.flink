@@ -20,6 +20,7 @@ import java.util.Random
                 urls[random.nextInt(urls.size)],
                 Calendar.getInstance().timeInMillis)
             ctx.collect(mockEvent)
+            //println(mockEvent)
             Thread.sleep(1000)
         }
     }
