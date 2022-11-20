@@ -1,4 +1,4 @@
-package me.demo.flink.watermark
+package me.demo.flink.window
 
 import me.demo.flink.source.ClickSource
 import me.demo.flink.source.Event
