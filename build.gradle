@@ -27,6 +27,11 @@ dependencies {
     compile "org.apache.flink:flink-streaming-java_$flinkScalaVersion:$flinkVersion"
     compile "org.apache.flink:flink-clients_$flinkScalaVersion:$flinkVersion"
     compile "org.apache.flink:flink-runtime-web_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-table-api-java-bridge_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-table-common:$flinkVersion"
+    compile "org.apache.flink:flink-table-planner-blink_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-runtime-web_$flinkScalaVersion:$flinkVersion"
+    compile "org.apache.flink:flink-python_$flinkScalaVersion:$flinkVersion"
 
     // table api
     compile "org.apache.flink:flink-table-api-java:$flinkVersion"
