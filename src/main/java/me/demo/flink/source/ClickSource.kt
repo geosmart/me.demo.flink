@@ -3,8 +3,9 @@ package me.demo.flink.source
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import java.util.Calendar
 import java.util.Random
+import java.util.stream.IntStream
 
- class ClickSource : SourceFunction<Event> {
+class ClickSource : SourceFunction<Event> {
 
     var running = true
 
@@ -16,10 +17,13 @@ import java.util.Random
         while (running) {
             //随机模拟数据
             val mockEvent = Event(
-                users[random.nextInt(users.size)],
+                users[0],
                 urls[random.nextInt(urls.size)],
-                Calendar.getInstance().timeInMillis)
-            ctx.collect(mockEvent)
+                Calendar.getInstance().timeInMillis-100000)
+
+            IntStream.range(0,4).parallel().forEach {
+                ctx.collect(mockEvent)
+            }
             //println(mockEvent)
             Thread.sleep(1000)
         }

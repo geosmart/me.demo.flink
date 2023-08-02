@@ -10,6 +10,7 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction
 import org.apache.flink.util.Collector
+import java.sql.Timestamp
 import java.time.Duration
 
 class PeriodicPvStateTest {
@@ -19,8 +20,10 @@ class PeriodicPvStateTest {
 
 fun main() {
     // 创建执行环境
-    val env = StreamExecutionEnvironment.getExecutionEnvironment()
-    env.parallelism = 4
+    val config = Configuration()
+    config.setString("akka.ask.timeout", "1200 s")
+    val env = StreamExecutionEnvironment.getExecutionEnvironment(config)
+    env.parallelism = 1
 
     val stream: SingleOutputStreamOperator<Event> = env
         .addSource(ClickSource())
@@ -53,20 +56,21 @@ class PeriodicResult : KeyedProcessFunction<String, Event, String>() {
         }
         //如果没有注册的话，注册定时器，有数据才会触发
         if (timerState!!.value() == null) {
-            ctx.timerService().registerProcessingTimeTimer(value.timestamp + 10000)
-            timerState!!.update(value.timestamp + 10000)
+            val watermark = ctx.timerService().currentWatermark()
+            val calcTime = value.timestamp + 10000
+            ctx.timerService().registerEventTimeTimer(calcTime)
+            println("注册定时器：${ctx.currentKey},${Timestamp(watermark)}->${Timestamp(calcTime)}")
+            timerState!!.update(calcTime)
         }
     }
 
     override fun onTimer(timestamp: Long, ctx: OnTimerContext, out: Collector<String>) {
-        super.onTimer(timestamp, ctx, out)
+        val watermark = ctx.timerService().currentWatermark()
+        //1个key注册多个定时器，只执行和符合state的
+        println("触发定时器：${ctx.currentKey},watermark=${Timestamp(watermark)},timestamp=${Timestamp(timestamp)}")
         //定时器触发，输出一次统计结果
         out.collect("${timestamp}，${ctx.currentKey},pv=${uvState!!.value()}")
         timerState!!.clear()
-
-        //触发后，立即注册下一个10s的定时器
-        ctx.timerService().registerProcessingTimeTimer(timestamp + 10000)
-        timerState!!.update(timestamp + 10000)
     }
 }
 
