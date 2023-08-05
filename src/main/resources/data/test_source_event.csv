@@ -1,0 +1,21 @@
+Alice , /home , 1000
+Bob , /cart , 2000
+Cary , /prod?id=100 , 3500
+Mary , /prod?id=200 , 10000
+Mary , /prod?id=200 , 11999
+
+# 触发0-10s窗口计算
+Mary , /prod?id=200 , 12000
+
+# 0-10s迟到的数据，实时累加
+Mary , /prod?id=200 , 6500
+Cary , /prod?id=200 , 8000
+Cary , /prod?id=100 , 70000
+
+# 触发10-20s的窗口计算，0-10s窗口彻底关闭
+Cary , /prod?id=200 , 72000
+
+# 0-10s的迟到数据，写入侧输出流
+Cary , /prod?id=100 , 3500
+Cary , /prod?id=100 , 4000
+

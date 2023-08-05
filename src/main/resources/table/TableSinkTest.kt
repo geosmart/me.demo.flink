@@ -1,5 +1,7 @@
-package me.demo.flink.table
+package table
 
+import me.demo.flink.table.ChangeLogRowSource
+import me.demo.flink.table.XiaoxinQuestion
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.table.annotation.DataTypeHint
@@ -12,7 +14,6 @@ import org.apache.flink.types.Row
 import org.apache.flink.types.RowKind
 import org.junit.Test
 import org.slf4j.LoggerFactory
-import java.util.UUID
 
 // 单个table的changelog，sink到1张表
 class TableSinkTest {

@@ -24,22 +24,23 @@ fun main() {
     val elementStream = env.addSource(ClickSource())
 
     //输出标签
-    val tagMary: OutputTag<Tuple3<String, String, Long>> = object : OutputTag<Tuple3<String, String, Long>>("mary") {}
+    val tagMary = object : OutputTag<Tuple3<String, String, Long>>("mary") {}
 
-    val tagLily: OutputTag<Tuple3<String, String, Long>> = object : OutputTag<Tuple3<String, String, Long>>("lily") {}
+    val tagLily = object : OutputTag<Tuple3<String, String, Long>>("lily") {}
 
-    val stream: SingleOutputStreamOperator<Event> = elementStream.assignTimestampsAndWatermarks(
+    val stream = elementStream.assignTimestampsAndWatermarks(
         WatermarkStrategy.forBoundedOutOfOrderness<Event>(Duration.ZERO)
             .withTimestampAssigner { element, _ -> element.timestamp }
     )
     // 侧输出流，给不同用户打上不同的标签
-    val processStream: SingleOutputStreamOperator<Event> = stream.process(
+    val processStream = stream.process(
         object : ProcessFunction<Event, Event>() {
             override fun processElement(value: Event, ctx: Context, out: Collector<Event>) {
                 when (value.user) {
                     "mary" -> {
                         ctx.output(tagMary, Tuple3.of(value.user, value.url, value.timestamp))
                     }
+
                     "lily" -> {
                         ctx.output(tagMary, Tuple3.of(value.user, value.url, value.timestamp))
                     }

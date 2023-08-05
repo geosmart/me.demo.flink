@@ -16,7 +16,7 @@ open class Event {
     }
 
     override fun toString(): String {
-        return "Event(user='$user', url='$url', timestamp=${Timestamp(timestamp)})"
+        return "Event(user='$user', url='$url', timestamp=${timestamp}，${Timestamp(timestamp)})"
     }
 
  }
