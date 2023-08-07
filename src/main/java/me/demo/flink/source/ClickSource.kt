@@ -27,6 +27,7 @@ class ClickSource : SourceFunction<Event> {
                 ctx.collect(mockEvent)
             }
             println(mockEvent)
+            Thread.sleep(2000)
         }
     }
 
